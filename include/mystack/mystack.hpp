@@ -3,7 +3,7 @@
 #include <semaphore.h>
 
 namespace mystack {
-    template<typename T>
+    template <typename T>
     struct stack 
     {
         T *elems;
@@ -17,19 +17,19 @@ namespace mystack {
      * @author Diego Graziati
      * @version V1.0
      */
-    template<typename T> void init_stack (mystack::stack<T> &stack, int capacity);
+    void init_stack (mystack::stack<int> &stack, int capacity);
 
     /**
      * @author Diego Graziati
      * @version V1.0
      */
-    template<typename T> void destroy_stack (mystack::stack<T> &stack);
+    void destroy_stack (mystack::stack<int> &stack);
 
     /**
      * @author Diego Graziati
      * @version V1.0
      */
-    template<typename T> int s_pop (mystack::stack<T> &stack, T &elem);
+    int s_pop (mystack::stack<int> &stack, int &elem);
 
     /**
      * @author Diego Graziati
@@ -38,5 +38,5 @@ namespace mystack {
      * @return 0 = everything went as expected and the operation was a ***SUCCESS***.
      *         1 = the input element type is different from the mystack::stack inner elements' array type, thus making it impossible to successfully push the input element into the stack.
      */
-    template<typename T> int s_push (mystack::stack<T> &stack, T elem);
+    int s_push (mystack::stack<int> &stack, int elem);
 }

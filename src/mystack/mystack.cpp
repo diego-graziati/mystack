@@ -1,8 +1,8 @@
 #include <mystack/mystack.hpp>
 
-template<typename T> void mystack::init_stack(mystack::stack<T> &stack, int capacity)
+void mystack::init_stack(mystack::stack<int> &stack, int capacity)
 {
-    stack.elems = new T[capacity];
+    stack.elems = new int[capacity];
     stack.size = 0;
     stack.capacity = capacity;
     pthread_mutex_init(&stack.can_access, nullptr);
@@ -12,7 +12,7 @@ template<typename T> void mystack::init_stack(mystack::stack<T> &stack, int capa
     sem_init(stack.empty, 0, capacity);
 }
 
-template<typename T> void mystack::destroy_stack (mystack::stack<T> &stack)
+void mystack::destroy_stack (mystack::stack<int> &stack)
 {
     delete[] stack.elems;
     pthread_mutex_destroy(&stack.can_access);
@@ -22,24 +22,7 @@ template<typename T> void mystack::destroy_stack (mystack::stack<T> &stack)
     delete stack.empty;
 }
 
-template<typename T> int mystack::s_pop (mystack::stack<T> &stack, T &elem)
-{
-    if (sizeof(elem) != sizeof(stack.elems[0])) 
-    {
-        return 1;
-    }
-
-    sem_wait(stack.empty);
-    pthread_mutex_lock(stack.can_access);
-    elem = stack.elems[stack.size];
-    stack.size--;
-    pthread_mutex_unlock(stack.can_access);
-    sem_post(stack.full);
-
-    return 0;
-}
-
-template<typename T> int mystack::s_push (mystack::stack<T> &stack, T elem)
+int mystack::s_pop (mystack::stack<int> &stack, int &elem)
 {
     if (sizeof(elem) != sizeof(stack.elems[0])) 
     {
@@ -47,11 +30,26 @@ template<typename T> int mystack::s_push (mystack::stack<T> &stack, T elem)
     }
 
     sem_wait(stack.full);
-    pthread_mutex_lock(stack.can_access);
-    stack.size++;
-    stack.elems[stack.size]=elem;
-    pthread_mutex_unlock(stack.can_access);
+    pthread_mutex_lock(&stack.can_access);
+    elem = stack.elems[--stack.size];
+    pthread_mutex_unlock(&stack.can_access);
     sem_post(stack.empty);
+
+    return 0;
+}
+
+int mystack::s_push (mystack::stack<int> &stack, int elem)
+{
+    if (sizeof(elem) != sizeof(stack.elems[0])) 
+    {
+        return 1;
+    }
+
+    sem_wait(stack.empty);
+    pthread_mutex_lock(&stack.can_access);
+    stack.elems[stack.size++]=elem;
+    pthread_mutex_unlock(&stack.can_access);
+    sem_post(stack.full);
 
     return 0;
 }
