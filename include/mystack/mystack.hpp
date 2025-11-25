@@ -1,29 +1,20 @@
 #pragma once
-#include <pthread.h>
-#include <semaphore.h>
 
 namespace mystack {
     template <typename T>
-    struct stack 
-    {
-        T *elems;
-        int size;
-        int capacity;
-        pthread_mutex_t can_access;
-        sem_t *full, *empty;
-    };
+    struct stack;
 
     /**
      * @author Diego Graziati
      * @version V1.0
      */
-    void init_stack (mystack::stack<int> &stack, int capacity);
+    int init_stack (mystack::stack<int> &stack, int capacity);
 
     /**
      * @author Diego Graziati
      * @version V1.0
      */
-    void destroy_stack (mystack::stack<int> &stack);
+    int destroy_stack (mystack::stack<int> &stack);
 
     /**
      * @author Diego Graziati
@@ -39,4 +30,6 @@ namespace mystack {
      *         1 = the input element type is different from the mystack::stack inner elements' array type, thus making it impossible to successfully push the input element into the stack.
      */
     int s_push (mystack::stack<int> &stack, int elem);
+
+    bool is_stack_full (mystack::stack<int> &stack);
 }
