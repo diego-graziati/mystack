@@ -1,6 +1,7 @@
 #pragma once
 
-namespace mystack {
+namespace mystack 
+{
     template <typename T>
     struct stack;
 
@@ -14,6 +15,10 @@ namespace mystack {
      *       The function implementations may differ in the actual error codes utilized.
      */
     int init_stack (mystack::stack<int> &stack, int capacity);
+    int init_stack (mystack::stack<float> &stack, int capacity);
+    int init_stack (mystack::stack<double> &stack, int capacity);
+    int init_stack (mystack::stack<void *> &stack, int capacity);
+    int init_stack (mystack::stack<char> &stack, int capacity);
 
     /**
      * @author Diego Graziati
